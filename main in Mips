@@ -1,0 +1,282 @@
+#addi $s0,$s0,5 #declare Max Size 
+
+     .data
+Queue1: .word 0:5 #definition of the 5 queues as global variables as all functions change them
+Queue2: .word 0:5
+Queue3: .word 0:5
+Queue4: .word 0:5
+Queue5: .word 0:5
+
+
+Queue_Size: .word 0:5 #defining a size variable for each queue
+Queue_Rear: .word 0:5 #defining a array of rear
+Queue_Front:.word 0:5 #defining a array of front
+Full_Message:.asciiz "The Queue Is Full."
+MenuMsg:.asciiz"1:Insert\n2:Delete\n3:Search\n4:Update\n5:Exit\n"
+Scan_Opcode:.asciiz"Enter opcode:"
+Scan_Queue_Number:.asciiz"Enter Queue Number:"
+Wrong_Input_Msg:.asciiz"Wrong Input\n"
+promptInt: .asciiz"Garen fucks ali mahmoud gay then albehery"
+     .text	
+
+la $t2,Queue_Size  # load first adderess of Queue_size
+
+#Assign zero to Queue_size with do-while loop
+Do_While:         add $t0, $zero, $zero # i=0
+Get_Off_Set_Size: sll $t1, $t0, 2  # *4
+                  add $t1, $t2, $zero
+                  sw $zero, ($t1)
+                  add $t0, $t0, 1 #i++
+                  blt $t0, 5, Get_Off_Set_Size # i < 5
+
+
+
+li $t0,0 #clear $t0
+li $t1,0 #clear $t1
+li $t4,4 #load $t4,4
+#Assign zero to Queue_Rear with do-while loop
+Get_Off_Set_Rear: sll $t1, $t0, 2  # *4
+                  add $t1, $t2, $zero
+                  sw $t4, ($t1)
+                  add $t0, $t0, 1 #i++
+                  blt $t0, 5, Get_Off_Set_Rear # i < 5
+
+
+
+li $t0,0 #clear $t0
+li $t1,0 #clear $t1
+#Assign zero to Queue_Front with do-while loop
+Get_Off_Set_Front:sll $t1, $t0, 2  # *4
+                  add $t1, $t2, $zero
+                  sw $zero, ($t1)
+                  add $t0, $t0, 1 #i++
+                  blt $t0, 5, Get_Off_Set_Front # i < 5
+
+li $t0,0 #clear $t0
+li $t1,0 #clear $t1
+
+j main
+Wrong_Input: li $v0,4                # code for print Wrong_message
+             la $a0,Wrong_Input_Msg  # point $a0 to prompt string
+             syscall
+
+
+main: 
+      li $v0,4        # code for print list
+      la $a0,MenuMsg  # point $a0 to prompt string
+      syscall
+
+      li $v0,4        # code for show opcode to be entered
+      la $a0,Scan_Opcode  # point $a0 to prompt string
+      syscall
+
+      li $v0,5        # code for read_int
+      syscall         #get int(opcode) from user --> returned in $v0
+      move $t0,$v0    # move the resulting int to $t0
+
+
+      li $v0,4        # code for show queue number to be entered 
+      la $a0,Scan_Queue_Number  # point $a0 to prompt string
+      syscall
+
+      li $v0,5        # code for read_int
+      syscall         #get int(queue number) from user --> returned in $v0
+      move $t1,$v0    # move the resulting int to $t1
+      
+      li $t5,5        #load $t5,5
+
+      #function that valdiate queue number
+      Validate_QNo:slt $t2,$t1,1    #if (queueNumber < 1 )
+                   slt $t3,$t5,$t1  #if (queueNumber > 5)
+                   or  $t4, $t2, $t3 #if (queueNumber < 1 || queueNumber > 5)
+      
+                   beq $t4,1,Wrong_Input         # if $t4 not equal 1 
+                                                 #call function to display wrong                      
+                                                 #Input message
+      #function that valdiate queue number
+      Validate_Opcode:slt $t2,$t0,1    #if (opcode < 1 )
+                      slt $t3,$t5,$t0  #if (opcode > 5)
+                      or  $t4, $t2, $t3 #if (opcode < 1 || opcode > 5)
+      
+                      beq $t4,1,Wrong_Input         # if $t4 not equal 1 
+                                                    #call function to display wrong                      
+                                                    #Input message
+      li $t2,2                                               
+      beq $t0, $t2,Delete_Function
+      li $v0,5     # code for read_int ,# get an integer from the user
+      syscall      #get int from user --> returned in $v0
+      move $t6,$v0 # move the resulting int to $t0
+                                  
+
+      li $t4, 1
+			o1_Cond:
+							beq $t1, $t4, insertFunction
+							addi $t4, 2
+							j o3_Cond
+      
+      o3_Cond:
+							beq $t1, $t4, searchFunction
+							addi $t4, 1
+							j o4_Cond
+	    o4_Cond:
+							beq $t1, $t4, updateFunction
+							j Wrong_Input
+							
+
+
+      Delete_Function: li $v0,4 # code for print_string
+                       la $a0,promptInt # point $a0 to prompt string
+                       syscall
+
+
+       
+
+
+     
+      
+
+
+
+
+
+#addi $s0,$s0,5 #declare Max Size 
+
+     .data
+Queue1: .word 0:5 #definition of the 5 queues as global variables as all functions change them
+Queue2: .word 0:5
+Queue3: .word 0:5
+Queue4: .word 0:5
+Queue5: .word 0:5
+
+
+Queue_Size: .word 0:5 #defining a size variable for each queue
+Queue_Rear: .word 0:5 #defining a array of rear
+Queue_Front:.word 0:5 #defining a array of front
+Full_Message:.asciiz "The Queue Is Full."
+MenuMsg:.asciiz"1:Insert\n2:Delete\n3:Search\n4:Update\n5:Exit\n"
+Scan_Opcode:.asciiz"Enter opcode:"
+Scan_Queue_Number:.asciiz"Enter Queue Number:"
+Wrong_Input_Msg:.asciiz"Wrong Input\n"
+promptInt: .asciiz"Garen fucks ali mahmoud gay then albehery"
+     .text	
+
+la $t2,Queue_Size  # load first adderess of Queue_size
+
+#Assign zero to Queue_size with do-while loop
+Do_While:         add $t0, $zero, $zero # i=0
+Get_Off_Set_Size: sll $t1, $t0, 2  # *4
+                  add $t1, $t2, $zero
+                  sw $zero, ($t1)
+                  add $t0, $t0, 1 #i++
+                  blt $t0, 5, Get_Off_Set_Size # i < 5
+
+
+
+li $t0,0 #clear $t0
+li $t1,0 #clear $t1
+li $t4,4 #load $t4,4
+#Assign zero to Queue_Rear with do-while loop
+Get_Off_Set_Rear: sll $t1, $t0, 2  # *4
+                  add $t1, $t2, $zero
+                  sw $t4, ($t1)
+                  add $t0, $t0, 1 #i++
+                  blt $t0, 5, Get_Off_Set_Rear # i < 5
+
+
+
+li $t0,0 #clear $t0
+li $t1,0 #clear $t1
+#Assign zero to Queue_Front with do-while loop
+Get_Off_Set_Front:sll $t1, $t0, 2  # *4
+                  add $t1, $t2, $zero
+                  sw $zero, ($t1)
+                  add $t0, $t0, 1 #i++
+                  blt $t0, 5, Get_Off_Set_Front # i < 5
+
+li $t0,0 #clear $t0
+li $t1,0 #clear $t1
+
+j main
+Wrong_Input: li $v0,4                # code for print Wrong_message
+             la $a0,Wrong_Input_Msg  # point $a0 to prompt string
+             syscall
+
+
+main: 
+      li $v0,4        # code for print list
+      la $a0,MenuMsg  # point $a0 to prompt string
+      syscall
+
+      li $v0,4        # code for show opcode to be entered
+      la $a0,Scan_Opcode  # point $a0 to prompt string
+      syscall
+
+      li $v0,5        # code for read_int
+      syscall         #get int(opcode) from user --> returned in $v0
+      move $t0,$v0    # move the resulting int to $t0
+
+
+      li $v0,4        # code for show queue number to be entered 
+      la $a0,Scan_Queue_Number  # point $a0 to prompt string
+      syscall
+
+      li $v0,5        # code for read_int
+      syscall         #get int(queue number) from user --> returned in $v0
+      move $t1,$v0    # move the resulting int to $t1
+      
+      li $t5,5        #load $t5,5
+
+      #function that valdiate queue number
+      Validate_QNo:slt $t2,$t1,1    #if (queueNumber < 1 )
+                   slt $t3,$t5,$t1  #if (queueNumber > 5)
+                   or  $t4, $t2, $t3 #if (queueNumber < 1 || queueNumber > 5)
+      
+                   beq $t4,1,Wrong_Input         # if $t4 not equal 1 
+                                                 #call function to display wrong                      
+                                                 #Input message
+      #function that valdiate queue number
+      Validate_Opcode:slt $t2,$t0,1    #if (opcode < 1 )
+                      slt $t3,$t5,$t0  #if (opcode > 5)
+                      or  $t4, $t2, $t3 #if (opcode < 1 || opcode > 5)
+      
+                      beq $t4,1,Wrong_Input         # if $t4 not equal 1 
+                                                    #call function to display wrong                      
+                                                    #Input message
+      li $t2,2                                               
+      beq $t0, $t2,Delete_Function
+      li $v0,5     # code for read_int ,# get an integer from the user
+      syscall      #get int from user --> returned in $v0
+      move $t6,$v0 # move the resulting int to $t0
+                                  
+
+      li $t4, 1
+			o1_Cond:
+							beq $t1, $t4, insertFunction
+							addi $t4, 2
+							j o3_Cond
+      
+      o3_Cond:
+							beq $t1, $t4, searchFunction
+							addi $t4, 1
+							j o4_Cond
+	    o4_Cond:
+							beq $t1, $t4, updateFunction
+							j Wrong_Input
+							
+
+
+      Delete_Function: li $v0,4 # code for print_string
+                       la $a0,promptInt # point $a0 to prompt string
+                       syscall
+
+
+       
+
+
+     
+      
+
+
+
+
+
